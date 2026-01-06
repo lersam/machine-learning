@@ -8,8 +8,10 @@ class NumberRecognition(torch.nn.Module):
         self.fc_head = torch.nn.Sequential(
             torch.nn.Linear(784, 128),
             torch.nn.ReLU(),
+            torch.nn.Dropout(p=0.2),
             torch.nn.Linear(128, 64),
             torch.nn.ReLU(),
+            torch.nn.Dropout(p=0.2),
             torch.nn.Linear(64, 10),
             torch.nn.LogSoftmax(dim=1)
         )
