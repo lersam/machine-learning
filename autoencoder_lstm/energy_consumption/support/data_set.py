@@ -47,6 +47,7 @@ class EnergyConsumption(torch.utils.data.Dataset):
             # clearing
             self.data_features.replace('?', np.nan, inplace=True)
 
+            data_features_path.parent.mkdir(parents=True, exist_ok=True)
             # saving locally
             self.data_features.to_csv(data_features_path.absolute(), index=False)
 
