@@ -29,11 +29,11 @@ class EnergyConsumption(torch.utils.data.Dataset):
 
 
     def _load_dataset(self):
-        data_features_path = Path(Path(__file__).parent,"../local_data/data_features.feather")
+        data_features_path = Path(Path(__file__).parent,"../local_data/data_features.csv")
         data_headers_path = Path(Path(__file__).parent, "../local_data/data_headers.npy")
 
         if data_features_path.exists() and data_headers_path.exists():
-            self.data_features = pd.read_feather(data_features_path.absolute())
+            self.data_features = pd.read_csv(data_features_path.absolute())
 
             values = np.load(data_headers_path.absolute(), allow_pickle=True)
             self.data_headers = pd.Index(values)
@@ -48,7 +48,7 @@ class EnergyConsumption(torch.utils.data.Dataset):
             self.data_features.replace('?', np.nan, inplace=True)
 
             # saving locally
-            self.data_features.to_feather(data_features_path.absolute())
+            self.data_features.to_csv(data_features_path.absolute(), index=False)
 
             np.save(data_headers_path.absolute(), self.data_headers.values)
 
