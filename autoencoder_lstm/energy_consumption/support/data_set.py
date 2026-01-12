@@ -25,6 +25,8 @@ class EnergyConsumptionDataset(torch.utils.data.Dataset):
         if self.data_features is None:
             raise ValueError("Failed to load dataset.")
 
+        self.number_of_channels = self.data_features.shape[1]
+
     def __len__(self):
         return len(self.data_features) - self.history_samples - self.horizon_samples + 1
 
