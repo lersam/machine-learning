@@ -1,4 +1,4 @@
-import torch
+﻿import torch
 
 
 class EnergyConsumptionModule(torch.nn.Module):
@@ -30,7 +30,9 @@ class EnergyConsumptionModule(torch.nn.Module):
         self.cnn_output_size = 32
 
         # LSTM branch on raw channels
-        self.lstm = torch.nn.LSTM(input_size=self.input_dim, hidden_size=self.lstm_hidden_size, num_layers=self.lstm_num_layers, batch_first=True, dropout=0.2 if self.lstm_num_layers>1 else 0)
+        self.lstm = torch.nn.LSTM(input_size=self.input_dim, hidden_size=self.lstm_hidden_size,
+                                  num_layers=self.lstm_num_layers, batch_first=True,
+                                  dropout=0.2 if self.lstm_num_layers > 1 else 0)
         fusion_size = self.cnn_output_size + self.lstm_hidden_size
 
         # FC head using Sequential
@@ -45,6 +47,7 @@ class EnergyConsumptionModule(torch.nn.Module):
             torch.nn.Dropout(p=0.2),
             torch.nn.Linear(100, self.output_dim)
         )
+
     def forward(self, x):
         if x.ndim == 2:
             x = x.unsqueeze(0)
@@ -53,7 +56,7 @@ class EnergyConsumptionModule(torch.nn.Module):
         cnn_encoding = cnn_out.mean(dim=2)
 
         # LSTM branch (batch, time, channels)
-        lstm_in = x.transpose(1,2)
+        lstm_in = x.transpose(1, 2)
         lstm_out, _ = self.lstm(lstm_in)
         lstm_encoding = lstm_out[:, -1, :]
         fused = torch.cat([cnn_encoding, lstm_encoding], dim=1)
