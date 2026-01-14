@@ -69,21 +69,22 @@ class EnergyConsumptionDataset(torch.utils.data.Dataset):
         if data_features_path.exists() and data_headers_path.exists():
             self.data_features = pd.read_csv(data_features_path.absolute())
 
-            self.data_features = self._clean_and_prepare_features(self.data_features)
-
             values = np.load(data_headers_path.absolute(), allow_pickle=True)
             self.data_headers = pd.Index(values)
         else:
             # read from network
             power_consumption = fetch_ucirepo(id=235)
-            features = power_consumption.data.features
 
             self.data_headers = power_consumption.data.headers
 
-            self.data_features = self._clean_and_prepare_features(features)
+            # use helper to clean and prepare features
+            self.data_features = self._clean_and_prepare_features(power_consumption.data.features)
 
             data_features_path.parent.mkdir(parents=True, exist_ok=True)
             # saving locally
             self.data_features.to_csv(data_features_path.absolute(), index=False)
 
             np.save(data_headers_path.absolute(), self.data_headers.values)
+
+        # remove data/time columns
+        self.data_features = self.data_features.drop(columns=["Date", "Time"], errors="ignore")
