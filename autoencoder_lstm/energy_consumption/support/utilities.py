@@ -1,5 +1,6 @@
 import random
-
+import os
+import time
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
@@ -27,6 +28,7 @@ def demo_model_shapes(model, train_loader, device=None):
         x = x.to(device)
     with torch.no_grad():
         y_pred = model(x)
+
     print(f"x: {tuple(x.shape)}, model(x): {tuple(y_pred.shape)}, y: {tuple(y.shape)}")
 
 
@@ -102,7 +104,7 @@ def plot_mse_horizon(model, test_loader, horizon, device=None):
 
 def training_loop(model, optimizer, criterion, device, train_dataset, validation_dataset, n_epochs=50, batch_size=20,
                   checkpoint_file_name=None):
-    import os, time
+
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=False)
     validation_loader = torch.utils.data.DataLoader(validation_dataset, batch_size=batch_size, shuffle=True,
                                                     drop_last=False) if validation_dataset is not None else None
@@ -148,8 +150,8 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
 
         train_accuracy = model_accuracy(model, train_loader)
         validate_accuracy = model_accuracy(model, validation_loader) if validation_loader is not None else -1
-        print(f"{epoch} of {n_epochs}. time={time.time() - epoch_start_time:0.2f}sec."
-              f" Loss: {current_loss / len(train_loader.dataset):0.4f}.Train accuracy: {train_accuracy:0.4f}."
+        print(f"{epoch + 1} of {n_epochs}. time={time.time() - epoch_start_time:0.2f}sec."
+              f" Loss: {current_loss / len(train_loader.dataset):0.4f}. Train accuracy: {train_accuracy:0.4f}."
               f" Validate accuracy: {validate_accuracy:0.4f}")
         progress_log.append({'epoch': epoch + 1, 'epoch_start_time': time.time() - epoch_start_time,
                              'loss': current_loss / len(train_loader.dataset), 'train_accuracy': train_accuracy,
@@ -164,7 +166,7 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
                 'progress_log': progress_log
             }
             torch.save(checkpoint_data, checkpoint_file_name)
-    model.eval();
+    model.eval()
     return model, progress_log
 
 

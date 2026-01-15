@@ -2,7 +2,7 @@ import os
 
 import torch
 
-from autoencoder_lstm.energy_consumption.support import build_loaders, EnergyConsumptionModule, demo_model_shapes, \
+from support import build_loaders, EnergyConsumptionModule, demo_model_shapes, \
     plot_convergence, plot_predictions_grid, plot_mse_horizon, train_and_evaluate
 from support.data_set import EnergyConsumptionDataset
 
@@ -21,8 +21,8 @@ if __name__ == '__main__':
                                                                            batch_size_train=200, batch_size_eval=2000)
 
     model = EnergyConsumptionModule(input_dim=energy_data.number_of_channels, output_dim=energy_data.horizon_samples)
-    demo_result = demo_model_shapes(model, train_loader)
-    print(demo_result.head())
+    demo_model_shapes(model, train_loader)
+
 
     checkpoint_file_name = os.path.join(data_folder, "ER Admission - CNN-LSTM Fusion.checkpoint.pt")
     model, progress_log, test_accuracy, test_loader = train_and_evaluate(model, train_dataset, test_dataset,
