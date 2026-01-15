@@ -33,16 +33,29 @@ def demo_model_shapes(model, train_loader, device=None):
 
 
 def model_accuracy(model, data_loader):
+    if data_loader is None:
+        return -1
+
+    # allow passing a Dataset as well as a DataLoader
+    if isinstance(data_loader, torch.utils.data.Dataset):
+        data_loader = torch.utils.data.DataLoader(data_loader, batch_size=2000, shuffle=False, drop_last=False)
+
     device_model = next(model.parameters()).device
     model.eval()
     with torch.no_grad():
-        current_mse, samples_counts = 0, 0
+        current_mse = 0.0
+        samples_counts = 0
+        loss_fn = torch.nn.MSELoss(reduction='sum')
         for X, y in data_loader:
-            X, y = X.to(device=device_model), y.to(device=device_model)
+            X = X.to(device=device_model)
+            y = y.to(device=device_model)
+            # if targets are (batch, channels, horizon) reduce to primary channel
+            if y.ndim == 3:
+                y = y[:, 0, :]
             y_pred = model(X)
-            current_mse += torch.nn.MSELoss()(y_pred, y) * len(y)
-            samples_counts += len(y)
-        return (current_mse / samples_counts).item()
+            current_mse += loss_fn(y_pred, y).item()
+            samples_counts += y.shape[0]
+        return (current_mse / (samples_counts)).item()
 
 
 def plot_convergence(progress_log, test_accuracy):
@@ -106,7 +119,7 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
                   checkpoint_file_name=None):
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=False)
-    validation_loader = torch.utils.data.DataLoader(validation_dataset, batch_size=batch_size, shuffle=True,
+    validation_loader = torch.utils.data.DataLoader(validation_dataset, batch_size=batch_size, shuffle=False,
                                                     drop_last=False) if validation_dataset is not None else None
 
     if (checkpoint_file_name is not None) and (os.path.isfile(checkpoint_file_name)):  # checkpoint found!
@@ -136,16 +149,20 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
         current_loss = 0
 
         for train_data, train_data_labels in train_loader:
-            train_data, train_data_labels = train_data.to(device=device), train_data_labels.to(
-                device=device)  # move train data to device.
+            train_data = train_data.to(device=device)
+            train_data_labels = train_data_labels.to(device=device)  # move train data to device.
 
-            optimizer.zero_grad()  # clear gradients of all model parameters.
-            output = model(train_data)  # forward pass: compute model predictions
-            loss = criterion(output, train_data_labels)  # calculate the current loss
-            loss.backward(retain_graph=True)  # backward pass: compute gradient of the loss for all model parameters.
-            optimizer.step()  # use gradients to update the model parameters
+            # reduce targets to primary channel if necessary: (batch, channels, horizon) -> (batch, horizon)
+            if train_data_labels.ndim == 3:
+                train_data_labels = train_data_labels[:, 0, :]
 
-            current_loss += loss.item() * len(train_data)  # weight loss by the size of the batch.
+            optimizer.zero_grad()
+            output = model(train_data)
+            loss = criterion(output, train_data_labels)
+            loss.backward()
+            optimizer.step()
+
+            current_loss += loss.item() * train_data.shape[0]
         # evaluate performance of the batch: torch.no_grad() is not required since it's called in the model_accuracy function.
 
         train_accuracy = model_accuracy(model, train_loader)
