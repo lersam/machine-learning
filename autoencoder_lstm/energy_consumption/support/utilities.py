@@ -147,8 +147,8 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
         model.train()  # set model into train mode.
 
         current_loss = 0
-
-        for train_data, train_data_labels in train_loader:
+        total_samples = len(train_loader)
+        for index, (train_data, train_data_labels) in enumerate(train_loader):
             train_data = train_data.to(device=device)
             train_data_labels = train_data_labels.to(device=device)  # move train data to device.
 
@@ -163,8 +163,10 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
             optimizer.step()
 
             current_loss += loss.item() * train_data.shape[0]
-        # evaluate performance of the batch: torch.no_grad() is not required since it's called in the model_accuracy function.
+            if index % 1_000 == 0:
+                print(f"{index + 1:,} of {total_samples:,}. batch loss: {loss.item():0.4f}.",)
 
+        # evaluate performance of the batch: torch.no_grad() is not required since it's called in the model_accuracy function.
         train_accuracy = model_accuracy(model, train_loader)
         validate_accuracy = model_accuracy(model, validation_loader) if validation_loader is not None else -1
         print(f"{epoch + 1} of {n_epochs}. time={time.time() - epoch_start_time:0.2f}sec."
