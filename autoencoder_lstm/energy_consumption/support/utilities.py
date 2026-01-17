@@ -55,7 +55,7 @@ def model_accuracy(model, data_loader):
             y_pred = model(X)
             current_mse += loss_fn(y_pred, y).item()
             samples_counts += y.shape[0]
-        return (current_mse / (samples_counts)).item()
+        return current_mse / samples_counts
 
 
 def plot_convergence(progress_log, test_accuracy):
@@ -101,10 +101,16 @@ def plot_mse_horizon(model, test_loader, horizon, device=None):
     model.eval()
     mse_t = torch.zeros(horizon)
     with torch.no_grad():
-        for (X, y) in test_loader:
+        for X, y in test_loader:
             if device is not None:
                 X, y = X.to(device), y.to(device)
+            # reduce targets to primary channel if necessary: (batch, channels, horizon) -> (batch, horizon)
+            if y.ndim == 3:
+                y = y[:, 0, :]
+            # ensure predictions match target shape (reduce channels if model outputs channels dimension)
             y_pred = model(X)
+            if y_pred.ndim == 3:
+                y_pred = y_pred[:, 0, :]
             mse_t += (y_pred - y).square().sum(dim=0).to('cpu')
     mse_t = mse_t / len(test_loader.dataset)
     plt.figure(figsize=(12, 6))
@@ -164,7 +170,7 @@ def training_loop(model, optimizer, criterion, device, train_dataset, validation
 
             current_loss += loss.item() * train_data.shape[0]
             if index % 1_000 == 0:
-                print(f"{index + 1:,} of {total_samples:,}. batch loss: {loss.item():0.4f}.",)
+                print(f"{index :,} of {total_samples:,}. batch loss: {loss.item():0.4f}.",)
 
         # evaluate performance of the batch: torch.no_grad() is not required since it's called in the model_accuracy function.
         train_accuracy = model_accuracy(model, train_loader)
