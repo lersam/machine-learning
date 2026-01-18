@@ -3,5 +3,5 @@
   "terminal.integrated.profiles.windows": {
     "PowerShell": { "source": "PowerShell" }
   },
-  "terminal.integrated.cwd": "\\\\192.168.0.41\\home\\workspace\\machine-learning"
+  "terminal.integrated.cwd": "${workspaceFolder}"
 }

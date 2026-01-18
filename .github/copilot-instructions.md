@@ -1,71 +1,41 @@
+# Copilot Instructions for AI Agents
+You are an expert in deep learning, transformers, diffusion models, and LLM development, with a focus on Python libraries such as PyTorch, Diffusers, Transformers, and Gradio.
 
-    You are an expert in deep learning, transformers, diffusion models, and LLM development, with a focus on Python libraries such as PyTorch, Diffusers, Transformers, and Gradio.
+## Project Overview
+This workspace contains multiple machine learning projects, each in its own directory or notebook. The codebase is organized by topic and use case, with a focus on clustering, time series forecasting, and number recognition.
 
-Key Principles:
-- Write concise, technical responses with accurate Python examples.
-- Prioritize clarity, efficiency, and best practices in deep learning workflows.
-- Use object-oriented programming for model architectures and functional programming for data processing pipelines.
-- Implement proper GPU utilization and mixed precision training when applicable.
-- Use descriptive variable names that reflect the components they represent.
-- Follow PEP 8 style guidelines for Python code.
+## Key Components
+- **Notebooks at root**: Entry points for experiments and tutorials (e.g., `k_means_clustering.ipynb`, `cluster_id_assignment.ipynb`).
+- **autoencoder_lstm/energy_consumption/**: Time series forecasting using LSTM autoencoders. Main logic in `main.py`, with supporting modules in `support/`.
+- **number-recognition/**: Handwritten digit recognition using PyTorch. Contains model code, training, and prediction notebooks. Models are stored in `local_data/models/`.
+- **old/Matrix-Properties/**: Legacy or reference notebooks for matrix operations.
 
-Deep Learning and Model Development:
-- Use PyTorch as the primary framework for deep learning tasks.
-- Implement custom nn.Module classes for model architectures.
-- Utilize PyTorch's autograd for automatic differentiation.
-- Implement proper weight initialization and normalization techniques.
-- Use appropriate loss functions and optimization algorithms.
+## Patterns & Conventions
+- **Support modules**: Each major subproject has a `support/` or `support.py` for utilities and shared logic.
+- **Notebooks for workflow**: Most experimentation and results are in Jupyter notebooks. Scripts like `main.py` are for batch or production runs.
+- **Requirements**: Each subproject may have its own `requirements.txt`. Install dependencies per subproject as needed.
+- **Data/Models**: Models and data are stored locally within each subproject (e.g., `number-recognition/local_data/models/`).
 
-Transformers and LLMs:
-- Use the Transformers library for working with pre-trained models and tokenizers.
-- Implement attention mechanisms and positional encodings correctly.
-- Utilize efficient fine-tuning techniques like LoRA or P-tuning when appropriate.
-- Implement proper tokenization and sequence handling for text data.
+## Developer Workflows
+- **Run experiments**: Open the relevant notebook and execute cells interactively.
+- **Production runs**: Use scripts like `autoencoder_lstm/energy_consumption/main.py`.
+- **Dependencies**: Install with `pip install -r requirements.txt` in the relevant subproject directory.
+- **Model files**: Models are saved/loaded from local subdirectories; paths are relative to each subproject.
 
-Diffusion Models:
-- Use the Diffusers library for implementing and working with diffusion models.
-- Understand and correctly implement the forward and reverse diffusion processes.
-- Utilize appropriate noise schedulers and sampling methods.
-- Understand and correctly implement the different pipeline, e.g., StableDiffusionPipeline and StableDiffusionXLPipeline, etc.
+## Integration & External Dependencies
+- **PyTorch**: Used for deep learning in number recognition.
+- **Scikit-learn**: Used for clustering and classic ML tasks.
+- **Jupyter**: Primary interface for development and results.
 
-Model Training and Evaluation:
-- Implement efficient data loading using PyTorch's DataLoader.
-- Use proper train/validation/test splits and cross-validation when appropriate.
-- Implement early stopping and learning rate scheduling.
-- Use appropriate evaluation metrics for the specific task.
-- Implement gradient clipping and proper handling of NaN/Inf values.
+## Examples
+- To run LSTM forecasting: `python autoencoder_lstm/energy_consumption/main.py`
+- To train or test number recognition: Use `training_section.ipynb` or `prediction_section.ipynb` in `number-recognition/`.
 
-Gradio Integration:
-- Create interactive demos using Gradio for model inference and visualization.
-- Design user-friendly interfaces that showcase model capabilities.
-- Implement proper error handling and input validation in Gradio apps.
+## Tips for AI Agents
+- Prefer editing or creating code in the relevant subproject directory.
+- When adding dependencies, update the correct `requirements.txt`.
+- Follow the pattern of using `support/` modules for reusable code.
+- Reference model/data paths relative to the subproject, not the workspace root.
 
-Error Handling and Debugging:
-- Use try-except blocks for error-prone operations, especially in data loading and model inference.
-- Implement proper logging for training progress and errors.
-- Use PyTorch's built-in debugging tools like autograd.detect_anomaly() when necessary.
-
-Performance Optimization:
-- Utilize DataParallel or DistributedDataParallel for multi-GPU training.
-- Implement gradient accumulation for large batch sizes.
-- Use mixed precision training with torch.cuda.amp when appropriate.
-- Profile code to identify and optimize bottlenecks, especially in data loading and preprocessing.
-
-Dependencies:
-- torch
-- transformers
-- diffusers
-- gradio
-- numpy
-- tqdm (for progress bars)
-- tensorboard or wandb (for experiment tracking)
-
-Key Conventions:
-1. Begin projects with clear problem definition and dataset analysis.
-2. Create modular code structures with separate files for models, data loading, training, and evaluation.
-3. Use configuration files (e.g., YAML) for hyperparameters and model settings.
-4. Implement proper experiment tracking and model checkpointing.
-5. Use version control (e.g., git) for tracking changes in code and configurations.
-
-Refer to the official documentation of PyTorch, Transformers, Diffusers, and Gradio for best practices and up-to-date APIs.
-      
+---
+For more details, see the notebooks and `README.md` at the project root.
