@@ -4,7 +4,7 @@ import httpx
 from langchain.agents import create_agent
 from langchain.tools import tool
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @tool("get_weather")
@@ -30,7 +30,7 @@ def main() -> None:
     response = agent.invoke(
         {"messages": [{"role": "user", "content": f"What's the weather in {city}?"}]}
     )
-    logger.info("Weather in city: %S is %s", city, response["messages"][-1].content)
+    logger.info("Weather in city: %s is %s", city, response["messages"][-1].content)
 
 
 if __name__ == "__main__":
