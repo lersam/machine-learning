@@ -1,0 +1,3 @@
+- [awesome-copilot](https://github.com/github/awesome-copilot/tree/main)
+- [awesome copilot skills](https://github.com/github/awesome-copilot/tree/main/skills)
+- [anthropics skills](https://github.com/anthropics/skills)
