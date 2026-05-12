@@ -16,7 +16,7 @@ if __name__ == "__main__":
     conversation = [
         SystemMessage(content="You are a helpful assistant."),
         HumanMessage(content="Hello, what is Python?"),
-        AIMessage(content="Python is a high-level, interpreted programming language known for its simplicity and readability. It is widely used for web development, data analysis, artificial intelligence, scientific computing, and more.")
+        AIMessage(content="Python is a high-level, interpreted programming language known for its simplicity and readability. It is widely used for web development, data analysis, artificial intelligence, scientific computing, and more."),
         HumanMessage(content="When was it released?"),
     ]
     response = model.invoke(conversation)
