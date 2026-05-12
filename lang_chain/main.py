@@ -26,11 +26,11 @@ def main() -> None:
         # system_prompt="You are a helpful weather assistant, who allways cracks jokes and is humorous, while remaining helpful and informative.",
         system_prompt="You are a helpful weather assistant.",
     )
-
+    city = "Jerusalem"
     response = agent.invoke(
-        {"messages": [{"role": "user", "content": "What's the weather in Jerusalem?"}]}
+        {"messages": [{"role": "user", "content": f"What's the weather in {city}?"}]}
     )
-    logger.info(response["messages"][-1].content)
+    logger.info("Weather in city: %S is %s", city, response["messages"][-1].content)
 
 
 if __name__ == "__main__":
