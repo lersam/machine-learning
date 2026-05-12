@@ -11,6 +11,13 @@
             "request": "launch",
             "program": "${workspaceFolder}\\autoencoder_lstm\\energy_consumption\\main.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "LangChain-Weather",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/lang_chain/main.py",
+            "console": "integratedTerminal"
         }
     ]
 }
