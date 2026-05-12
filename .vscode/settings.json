@@ -3,5 +3,9 @@
   "terminal.integrated.profiles.windows": {
     "PowerShell": { "source": "PowerShell" }
   },
-  "terminal.integrated.cwd": "${workspaceFolder}"
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "files.exclude": {
+    "**/.git": true,
+    "**/__pycache__": true,
+  }
 }
