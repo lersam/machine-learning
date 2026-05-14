@@ -8,7 +8,7 @@
             "name": "main",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}\\autoencoder_lstm\\energy_consumption\\main.py",
+            "program": "${workspaceFolder}/autoencoder_lstm/energy_consumption/main.py",
             "console": "integratedTerminal"
         },
         {
@@ -30,6 +30,20 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/lang_chain/multimodal.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "RAG-Module",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/lang_chain/rag_module.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Select-Model-Dynamically",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/lang_chain/select_model_dynamically.py",
             "console": "integratedTerminal"
         }
     ]
