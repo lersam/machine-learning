@@ -1,4 +1,4 @@
-[TOC]
+[__TOC__]
 # lang_chain
 
 Practical starter examples for building local LangChain agents and chat flows with Ollama models.
