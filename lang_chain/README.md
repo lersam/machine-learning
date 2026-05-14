@@ -1,7 +1,17 @@
-[[__TOC__]]
+[TOC]
 # lang_chain
 
 Practical starter examples for building local LangChain agents and chat flows with Ollama models.
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Troubleshooting](#troubleshooting)
+- [Next Steps](#next-steps)
+- [References](#references)
 
 This folder contains small, runnable scripts for:
 
