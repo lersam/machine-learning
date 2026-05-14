@@ -10,10 +10,10 @@ logger = logging.getLogger(__name__)
 @tool("get_weather")
 def get_weather(city: str) -> str:
     """Get the current weather in a given city."""
-    logger.info(f"Getting weather for {city}")
+    logger.info("Getting weather for %s", city)
     response = httpx.get(f"https://wttr.in/{city}?format=j1")
     if response.status_code != httpx.codes.OK:
-        logger.error(f"Failed to get weather data: {response.text}")
+        logger.error("Failed to get weather data: %s", response.text)
         return "Sorry, I couldn't get the weather data right now."
 
     return response.json()
@@ -21,7 +21,7 @@ def get_weather(city: str) -> str:
 def main() -> None:
     """Run the lang_chain module entrypoint."""
     agent = create_agent(
-        model="ollama:qwen3.5:2b",
+        model="ollama:qwen3:14b",
         tools=[get_weather],
         # system_prompt="You are a helpful weather assistant, who allways cracks jokes and is humorous, while remaining helpful and informative.",
         system_prompt="You are a helpful weather assistant.",
